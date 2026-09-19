@@ -248,6 +248,115 @@ function makeWorld(){
 }
 makeWorld();
 
+
+// ---------------- V2 WORLD POLISH ----------------
+function makeCloud(x,y,z,scale=1){
+  const g=new THREE.Group();
+  const mat=new THREE.MeshLambertMaterial({color:0xffffff,transparent:true,opacity:.82});
+  [[0,0,0,3],[3,0,0,2.2],[-3,.2,0,2.4],[0,.6,1.8,2.2]].forEach(([a,b,c,s])=>{
+    const m=new THREE.Mesh(new THREE.BoxGeometry(s*2,.9,s),mat);
+    m.position.set(a,b,c); g.add(m);
+  });
+  g.position.set(x,y,z); g.scale.setScalar(scale); scene.add(g);
+  animated.push({obj:g,type:"cloud",base:x});
+}
+function makeMountain(x,z,h=16,w=18){
+  const group=new THREE.Group();
+  const rock=new THREE.MeshLambertMaterial({color:0x536372});
+  const snow=new THREE.MeshLambertMaterial({color:0xd9e4ec});
+  for(let y=0;y<h;y++){
+    const radius=Math.max(1,(1-y/h)*w);
+    const count=Math.max(5,Math.floor(radius/2));
+    for(let i=0;i<count;i++){
+      const a=i/count*Math.PI*2;
+      const r=radius*(.35+.65*Math.random());
+      const b=block(x+Math.cos(a)*r,y+.5,z+Math.sin(a)*r,Math.random()>.85?snow:rock,2,1.2,2,false);
+      group.add(b);
+    }
+  }
+  world.add(group);
+}
+function makeFlowers(){
+  const flowerMats=[
+    new THREE.MeshBasicMaterial({color:0xffd85e}),
+    new THREE.MeshBasicMaterial({color:0xff7d9b}),
+    new THREE.MeshBasicMaterial({color:0xb88cff})
+  ];
+  for(let i=0;i<90;i++){
+    let x=(Math.random()-.5)*145, z=(Math.random()-.5)*145;
+    if(Math.abs(x)<14 && Math.abs(z)<18) continue;
+    const stem=box(x,.45,z,.12,.8,.12,mats.leaf,false);
+    const f=box(x,.9,z,.28,.28,.28,flowerMats[i%flowerMats.length],false);
+    animated.push({obj:f,type:"flower",base:f.position.y,phase:Math.random()*6});
+  }
+}
+function makeRocks(){
+  for(let i=0;i<45;i++){
+    const x=(Math.random()-.5)*145, z=(Math.random()-.5)*145;
+    if(Math.abs(x)<18 && Math.abs(z)<18) continue;
+    const r=box(x,.45,z,.8+Math.random()*1.5,.7+Math.random(),.8+Math.random()*1.5,mats.stone,false);
+    r.rotation.y=Math.random()*Math.PI;
+  }
+}
+function makeFountain(){
+  const x=0,z=0;
+  for(let i=0;i<8;i++){
+    const a=i/8*Math.PI*2;
+    box(x+Math.cos(a)*4,.65,z+Math.sin(a)*4,1.2,1.3,1.2,mats.stone,false);
+  }
+  const core=box(x,1.5,z,1.4,3,1.4,mats.stone,false);
+  const water=box(x,3.15,z,1.05,.15,1.05,mats.water,false);
+  animated.push({obj:water,type:"water",base:3.15,phase:0});
+}
+function makeSignPosts(){
+  const signs=[
+    [0,1.8,18,"SPAWN →"],
+    [-20,1.8,-35,"← EDUCATION"],
+    [-24,1.8,20,"← SKILLS"],
+    [20,1.8,20,"PROJECTS →"],
+    [20,1.8,-35,"JOURNEY →"],
+    [0,1.8,-28,"CONTACT ↓"]
+  ];
+  for(const [x,y,z,t] of signs){
+    box(x,.9,z,.22,1.8,.22,mats.woodDark,false);
+    label(t,x,y+1.5,z,"#f7e4a1",.25);
+  }
+}
+function makeV2Details(){
+  // distant mountain ring
+  makeMountain(-65,-65,15,18); makeMountain(65,-65,18,21);
+  makeMountain(-65,65,20,22); makeMountain(65,65,16,18);
+  for(let i=0;i<10;i++) makeCloud(-70+i*17,28+Math.random()*9,-55+Math.random()*100,.8+Math.random()*.55);
+  makeFlowers();
+  makeRocks();
+  makeFountain();
+  makeSignPosts();
+
+  // extra project-workshop detail: desks, books, monitors and cricket lights
+  for(let i=0;i<5;i++){
+    box(24+i*4,1.1,39,3.2,2,.7,mats.woodDark,false);
+    box(24+i*4,2.3,38.7,2.5,1.2,.25,mats.glass,false);
+  }
+  for(const x of [39,49,59]){
+    box(x,5,22,.7,7,.7,mats.darkStone,false);
+    const lamp=box(x,8.6,22,1.1,.6,1.1,mats.gold,false);
+    animated.push({obj:lamp,type:"light",base:8.6});
+  }
+
+  // Star field for nighttime
+  for(let i=0;i<220;i++){
+    const star=new THREE.Mesh(
+      new THREE.BoxGeometry(.08,.08,.08),
+      new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.75})
+    );
+    const a=Math.random()*Math.PI*2, r=130+Math.random()*50;
+    star.position.set(Math.cos(a)*r,45+Math.random()*55,Math.sin(a)*r);
+    scene.add(star);
+    animated.push({obj:star,type:"star",base:star.material.opacity,phase:Math.random()*8});
+  }
+}
+makeV2Details();
+
 const hemi = new THREE.HemisphereLight(0xbfe8ff,0x34472e,1.5);
 scene.add(hemi);
 const sun = new THREE.DirectionalLight(0xfff0c7,2.3);
@@ -435,6 +544,10 @@ function animate(){
     if(a.type==="portal") a.obj.rotation.z+=dt*.7;
     if(a.type==="particle"){a.obj.position.y=a.base+Math.sin(performance.now()*.0008+a.obj.position.x)*.7;}
     if(a.type==="light") a.obj.scale.setScalar(.9+Math.sin(performance.now()*.01)*.1);
+    if(a.type==="cloud") a.obj.position.x=a.base+Math.sin(performance.now()*.00008+a.obj.position.z)*7;
+    if(a.type==="flower") a.obj.rotation.z=Math.sin(performance.now()*.002+a.phase)*.08;
+    if(a.type==="water") { a.obj.position.y=a.base+Math.sin(performance.now()*.002+a.phase)*.06; a.obj.scale.x=1+Math.sin(performance.now()*.0015)*.04; }
+    if(a.type==="star") a.obj.material.opacity=.45+.35*Math.sin(performance.now()*.002+a.phase);
   }
   const near=nearestInteraction();
   const prompt=document.querySelector("#interaction");

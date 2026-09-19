@@ -1,4 +1,4 @@
-# YESWANTH 3D PORTFOLIO
+# YESWANTH 3D PORTFOLIO — V2
 
 A Minecraft-inspired voxel portfolio for YESWANTH, built with Three.js.
 
@@ -21,6 +21,8 @@ A Minecraft-inspired voxel portfolio for YESWANTH, built with Three.js.
 - GitHub Pages compatible
 - No API keys required
 - No external image assets required
+- V2 terrain, mountains, clouds, flowers, rocks, fountain and star field
+- Extra project-workshop details and cinematic overlay
 
 ## Upload to GitHub
 
@@ -83,3 +85,8 @@ Instagram:
 
 Email:
 yashwanthboppe0210@gmail.com
+
+
+## V2 update
+
+This version keeps the same GitHub Pages setup. Replace the old `index.html`, `style.css`, and `main.js` with the V2 files, then commit the changes.

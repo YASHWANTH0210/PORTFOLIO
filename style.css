@@ -116,3 +116,14 @@ button { font:inherit; color:inherit; cursor:pointer; border:0; }
   .map-grid { grid-template-columns:repeat(2,1fr); }
   .panel-card { padding:23px; }
 }
+
+
+/* V2 cinematic polish */
+body::after {
+  content:"";
+  position:fixed; inset:0; z-index:4; pointer-events:none;
+  background:radial-gradient(circle at center, transparent 45%, rgba(0,0,0,.18) 100%);
+}
+#hud { text-shadow:0 2px 8px rgba(0,0,0,.55); }
+.panel-card { border-color:rgba(120,245,167,.22); }
+#crosshair { font-weight:900; }
