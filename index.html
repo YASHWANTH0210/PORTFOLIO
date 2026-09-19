@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YESWANTH — 3D Portfolio</title>
+  <meta name="description" content="YESWANTH — Web Developer, AI Engineer, Full Stack. An interactive voxel portfolio world.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="loading">
+    <div class="loading-card">
+      <div class="pixel-title">YESWANTH</div>
+      <div class="loading-subtitle">3D PORTFOLIO</div>
+      <div class="loading-status">GENERATING WORLD...</div>
+      <div class="progress"><span id="progress-bar"></span></div>
+      <div id="progress-text">0%</div>
+      <button id="enter-btn" hidden>ENTER WORLD</button>
+    </div>
+  </div>
+
+  <div id="hud" class="hidden">
+    <div class="brand-hud">
+      <strong>YESWANTH</strong>
+      <span>WEB • AI • FULL STACK</span>
+    </div>
+    <div class="top-actions">
+      <button id="map-btn">MAP</button>
+      <button id="menu-btn">MENU</button>
+    </div>
+    <div id="crosshair">+</div>
+    <div id="interaction">[E] INTERACT</div>
+    <div id="hint">WASD move • Mouse look • SPACE jump • E interact • ESC menu</div>
+    <div class="status">
+      <span id="time-label">DAY</span>
+      <span id="sound-label">🔊</span>
+    </div>
+  </div>
+
+  <div id="panel" class="overlay hidden">
+    <div class="panel-card">
+      <button class="close" id="panel-close">×</button>
+      <div id="panel-content"></div>
+    </div>
+  </div>
+
+  <div id="map-panel" class="overlay hidden">
+    <div class="panel-card map-card">
+      <button class="close" id="map-close">×</button>
+      <h2>WORLD MAP</h2>
+      <div class="map-grid">
+        <div class="map-node spawn">SPAWN</div>
+        <div class="map-node library">EDUCATION<br>LIBRARY</div>
+        <div class="map-node skills">SKILLS<br>MINE</div>
+        <div class="map-node projects">PROJECT<br>WORKSHOP</div>
+        <div class="map-node journey">MY<br>JOURNEY</div>
+        <div class="map-node contact">CONTACT<br>PORTAL</div>
+      </div>
+      <p class="muted">Explore the world and interact with glowing locations.</p>
+    </div>
+  </div>
+
+  <div id="menu" class="overlay hidden">
+    <div class="panel-card menu-card">
+      <h2>PAUSED</h2>
+      <button id="resume-btn">RESUME</button>
+      <button id="menu-map-btn">WORLD MAP</button>
+      <button id="sound-btn">SOUND: ON</button>
+      <button id="fullscreen-btn">FULLSCREEN</button>
+      <p class="controls-copy">WASD move · Mouse look · SPACE jump · E interact</p>
+    </div>
+  </div>
+
+  <div id="mobile-controls" class="hidden">
+    <div class="mobile-left">
+      <button data-key="KeyW">▲</button>
+      <div><button data-key="KeyA">◀</button><button data-key="KeyS">▼</button><button data-key="KeyD">▶</button></div>
+    </div>
+    <div class="mobile-right">
+      <button id="mobile-jump">JUMP</button>
+      <button id="mobile-interact">E</button>
+    </div>
+  </div>
+
+  <canvas id="world"></canvas>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="main.js"></script>
+</body>
+</html>
